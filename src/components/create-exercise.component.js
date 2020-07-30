@@ -75,9 +75,8 @@ export default class CreateExercise extends Component {
         "https://exercise-log-nodejs-mongodb.herokuapp.com/exercises/add",
         exercise
       )
-      .then((res) => console.log(res.data));
-
-    window.location = "/";
+      .then((res) => console.log(res.data))
+      .then(() => (window.location = "/"));
   }
 
   render() {

@@ -45,7 +45,7 @@ export default class ExercisesList extends Component {
   deleteExercise(id) {
     axios
       .delete(
-        "https://exercise-log-nodejs-mongodb.herokuapp.com/exercises" + id
+        "https://exercise-log-nodejs-mongodb.herokuapp.com/exercises/" + id
       )
       .then((res) => console.log(res.data));
 
@@ -75,7 +75,7 @@ export default class ExercisesList extends Component {
             <tr>
               <th>Username</th>
               <th>Description</th>
-              <th>Duration</th>
+              <th>Duration(min)</th>
               <th>Date</th>
               <th>Actions</th>
             </tr>
