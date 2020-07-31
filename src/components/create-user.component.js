@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import axios from "axios";
+
+import ExerciseService from "../service/ExerciseService";
 
 export default class CreateUser extends Component {
   constructor(props) {
@@ -27,9 +28,9 @@ export default class CreateUser extends Component {
     };
     console.log(user);
 
-    axios
-      .post("https://exercise-log-nodejs-mongodb.herokuapp.com/users/add", user)
-      .then((res) => console.log(res.data));
+    // axios
+    //   .post("https://exercise-log-nodejs-mongodb.herokuapp.com/users/add", user)
+    ExerciseService.addNewUser(user).then((res) => console.log(res.data));
 
     this.setState({
       username: "",

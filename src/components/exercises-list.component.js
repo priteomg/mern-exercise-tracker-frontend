@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
-import axios from "axios";
+
+import ExerciseService from "../service/ExerciseService";
 
 const Exercise = (props) => (
   <tr>
@@ -9,15 +9,20 @@ const Exercise = (props) => (
     <td>{props.exercise.duration}</td>
     <td>{props.exercise.date.substring(0, 10)}</td>
     <td>
-      <Link to={"/edit/" + props.exercise._id}>edit</Link> |{" "}
-      <a
-        href="#"
+      <button
+        className="btn btn-primary"
+        onClick={() => (window.location = `/edit/${props.exercise._id}`)}
+      >
+        Edit
+      </button>{" "}
+      <button
+        className="btn btn-danger"
         onClick={() => {
           props.deleteExercise(props.exercise._id);
         }}
       >
         Delete
-      </a>
+      </button>
     </td>
   </tr>
 );
@@ -32,8 +37,9 @@ export default class ExercisesList extends Component {
   }
 
   componentDidMount() {
-    axios
-      .get("https://exercise-log-nodejs-mongodb.herokuapp.com/exercises")
+    // axios
+    //   .get("https://exercise-log-nodejs-mongodb.herokuapp.com/exercises")
+    ExerciseService.getAllExercise()
       .then((res) => {
         this.setState({ exercises: res.data });
       })
@@ -43,11 +49,11 @@ export default class ExercisesList extends Component {
   }
 
   deleteExercise(id) {
-    axios
-      .delete(
-        "https://exercise-log-nodejs-mongodb.herokuapp.com/exercises/" + id
-      )
-      .then((res) => console.log(res.data));
+    // axios
+    //   .delete(
+    //     "https://exercise-log-nodejs-mongodb.herokuapp.com/exercises/" + id
+    //   )
+    ExerciseService.deleteExercise(id).then((res) => console.log(res.data));
 
     this.setState({
       exercises: this.state.exercises.filter((el) => el._id !== id),

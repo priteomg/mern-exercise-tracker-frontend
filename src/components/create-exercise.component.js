@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import axios from "axios";
+
+import ExerciseService from "../service/ExerciseService";
 
 export default class CreateExercise extends Component {
   constructor(props) {
@@ -23,16 +24,16 @@ export default class CreateExercise extends Component {
   }
 
   componentDidMount() {
-    axios
-      .get("https://exercise-log-nodejs-mongodb.herokuapp.com/users")
-      .then((res) => {
-        if (res.data.length > 0) {
-          this.setState({
-            users: res.data.map((user) => user.username),
-            username: res.data[0].username,
-          });
-        }
-      });
+    // axios
+    //   .get("https://exercise-log-nodejs-mongodb.herokuapp.com/users")
+    ExerciseService.getAllUser().then((res) => {
+      if (res.data.length > 0) {
+        this.setState({
+          users: res.data.map((user) => user.username),
+          username: res.data[0].username,
+        });
+      }
+    });
   }
 
   onChangeUsername(e) {
@@ -70,11 +71,12 @@ export default class CreateExercise extends Component {
     };
     console.log(exercise);
 
-    axios
-      .post(
-        "https://exercise-log-nodejs-mongodb.herokuapp.com/exercises/add",
-        exercise
-      )
+    // axios
+    //   .post(
+    //     "https://exercise-log-nodejs-mongodb.herokuapp.com/exercises/add",
+    //     exercise
+    //   )
+    ExerciseService.createExercise(exercise)
       .then((res) => console.log(res.data))
       .then(() => (window.location = "/"));
   }

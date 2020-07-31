@@ -1,7 +1,8 @@
 import React, { Component } from "react";
-import axios from "axios";
+
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import ExerciseService from "../service/ExerciseService";
 
 export default class EditExercises extends Component {
   constructor(props) {
@@ -23,11 +24,12 @@ export default class EditExercises extends Component {
   }
 
   componentDidMount() {
-    axios
-      .get(
-        "https://exercise-log-nodejs-mongodb.herokuapp.com/exercises/" +
-          this.props.match.params.id
-      )
+    // axios
+    //   .get(
+    //     "https://exercise-log-nodejs-mongodb.herokuapp.com/exercises/" +
+    //       this.props.match.params.id
+    //   )
+    ExerciseService.getOneExercise(this.props.match.params.id)
       .then((res) => {
         this.setState({
           username: res.data.username,
@@ -39,15 +41,15 @@ export default class EditExercises extends Component {
       .catch((error) => {
         console.log(error);
       });
-    axios
-      .get("https://exercise-log-nodejs-mongodb.herokuapp.com/users/")
-      .then((res) => {
-        if (res.data.length > 0) {
-          this.setState({
-            users: res.data.map((user) => user.username),
-          });
-        }
-      });
+    // axios
+    //   .get("https://exercise-log-nodejs-mongodb.herokuapp.com/users/")
+    ExerciseService.getAllUser().then((res) => {
+      if (res.data.length > 0) {
+        this.setState({
+          users: res.data.map((user) => user.username),
+        });
+      }
+    });
   }
 
   onChangeUsername(e) {
@@ -85,12 +87,13 @@ export default class EditExercises extends Component {
     };
     console.log(exercise);
 
-    axios
-      .post(
-        "https://exercise-log-nodejs-mongodb.herokuapp.com/exercises/update/" +
-          this.props.match.params.id,
-        exercise
-      )
+    // axios
+    //   .post(
+    //     "https://exercise-log-nodejs-mongodb.herokuapp.com/exercises/update/" +
+    //       this.props.match.params.id,
+    //     exercise
+    //   )
+    ExerciseService.updateExercise(this.props.match.params.id, exercise)
       .then((res) => console.log(res.data))
       .then(() => (window.location = "/"));
   }
