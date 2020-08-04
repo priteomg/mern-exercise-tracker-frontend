@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useRef } from "react";
-
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import ExerciseService from "../service/ExerciseService";
@@ -9,7 +8,7 @@ export default function EditExercises(props) {
     username: "",
     description: "",
     duration: 0,
-    date: new Date(),
+    date: null,
   });
 
   const [user, setUser] = useState([]);
@@ -59,10 +58,12 @@ export default function EditExercises(props) {
   };
 
   const onChangeDate = (date) => {
+    console.log(date);
+
     setExercise({ ...exercise, date: date });
   };
 
-  const onSubmit = async (e) => {
+  const onSubmit = (e) => {
     e.preventDefault();
     console.log(exercise);
 
