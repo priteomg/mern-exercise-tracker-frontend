@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useEffect, useState } from "react";
 
 import ExerciseService from "../service/ExerciseService";
 
@@ -27,68 +27,53 @@ const Exercise = (props) => (
   </tr>
 );
 
-export default class ExercisesList extends Component {
-  constructor(props) {
-    super(props);
+export default function ExercisesList(props) {
+  const [exercise, setExercise] = useState([]);
 
-    this.deleteExercise = this.deleteExercise.bind(this);
-
-    this.state = { exercises: [] };
-  }
-
-  componentDidMount() {
-    // axios
-    //   .get("https://exercise-log-nodejs-mongodb.herokuapp.com/exercises")
+  useEffect(() => {
     ExerciseService.getAllExercise()
       .then((res) => {
-        this.setState({ exercises: res.data });
+        setExercise(res.data);
       })
       .catch((error) => {
         console.log(error);
       });
-  }
+  }, []);
 
-  deleteExercise(id) {
-    // axios
-    //   .delete(
-    //     "https://exercise-log-nodejs-mongodb.herokuapp.com/exercises/" + id
-    //   )
+  const deleteExercise = (id) => {
     ExerciseService.deleteExercise(id).then((res) => console.log(res.data));
 
-    this.setState({
-      exercises: this.state.exercises.filter((el) => el._id !== id),
-    });
-  }
+    const totalExercise = exercise.filter((el) => el._id !== id);
+    setExercise(totalExercise);
+  };
 
-  exercisesList() {
-    return this.state.exercises.map((currentExercise) => {
+  const exercisesList = () => {
+    return exercise.map((currentExercise) => {
       return (
         <Exercise
           exercise={currentExercise}
-          deleteExercise={this.deleteExercise}
+          deleteExercise={deleteExercise}
           key={currentExercise._id}
         />
       );
     });
-  }
+  };
 
-  render() {
-    return (
-      <div>
-        <h3>Logged Exercises</h3>
-        <table className="table">
-          <thead className="thead-light">
-            <tr>
-              <th>Username</th>
-              <th>Description</th>
-              <th>Duration(min)</th>
-              <th>Date</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>{this.exercisesList()}</tbody>
-        </table>
-      </div>
-    );
-  }
+  return (
+    <div>
+      <h3>Logged Exercises</h3>
+      <table className="table">
+        <thead className="thead-light">
+          <tr>
+            <th>Username</th>
+            <th>Description</th>
+            <th>Duration(min)</th>
+            <th>Date</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>{exercisesList()}</tbody>
+      </table>
+    </div>
+  );
 }

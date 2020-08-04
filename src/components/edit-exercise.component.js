@@ -1,37 +1,26 @@
-import React, { Component } from "react";
+import React, { useEffect, useState, useRef } from "react";
 
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import ExerciseService from "../service/ExerciseService";
 
-export default class EditExercises extends Component {
-  constructor(props) {
-    super(props);
+export default function EditExercises(props) {
+  const [exercise, setExercise] = useState({
+    username: "",
+    description: "",
+    duration: 0,
+    date: new Date(),
+  });
 
-    this.onChangeUsername = this.onChangeUsername.bind(this);
-    this.onChangeDescription = this.onChangeDescription.bind(this);
-    this.onChangeDuration = this.onChangeDuration.bind(this);
-    this.onChangeDate = this.onChangeDate.bind(this);
-    this.onSubmit = this.onSubmit.bind(this);
+  const [user, setUser] = useState([]);
 
-    this.state = {
-      username: "",
-      description: "",
-      duration: 0,
-      date: new Date(),
-      users: [],
-    };
-  }
+  const userInput = useRef(null);
 
-  componentDidMount() {
-    // axios
-    //   .get(
-    //     "https://exercise-log-nodejs-mongodb.herokuapp.com/exercises/" +
-    //       this.props.match.params.id
-    //   )
-    ExerciseService.getOneExercise(this.props.match.params.id)
+  const getExerciseData = () => {
+    ExerciseService.getOneExercise(props.match.params.id)
       .then((res) => {
-        this.setState({
+        console.log(res.data);
+        setExercise({
           username: res.data.username,
           description: res.data.description,
           duration: res.data.duration,
@@ -41,124 +30,103 @@ export default class EditExercises extends Component {
       .catch((error) => {
         console.log(error);
       });
-    // axios
-    //   .get("https://exercise-log-nodejs-mongodb.herokuapp.com/users/")
+  };
+
+  const getUsersData = () => {
     ExerciseService.getAllUser().then((res) => {
       if (res.data.length > 0) {
-        this.setState({
-          users: res.data.map((user) => user.username),
-        });
+        let users = res.data.map((user) => user.username);
+        setUser(users);
       }
     });
-  }
+  };
 
-  onChangeUsername(e) {
-    this.setState({
-      username: e.target.value,
-    });
-  }
+  useEffect(() => {
+    getExerciseData();
+    getUsersData();
+  }, []);
 
-  onChangeDescription(e) {
-    this.setState({
-      description: e.target.value,
-    });
-  }
+  const onChangeUsername = (e) => {
+    setExercise({ ...exercise, username: e.target.value });
+  };
 
-  onChangeDuration(e) {
-    this.setState({
-      duration: e.target.value,
-    });
-  }
+  const onChangeDescription = (e) => {
+    setExercise({ ...exercise, description: e.target.value });
+  };
 
-  onChangeDate(date) {
-    this.setState({
-      date: date,
-    });
-  }
+  const onChangeDuration = (e) => {
+    setExercise({ ...exercise, duration: e.target.value });
+  };
 
-  onSubmit(e) {
+  const onChangeDate = (date) => {
+    setExercise({ ...exercise, date: date });
+  };
+
+  const onSubmit = async (e) => {
     e.preventDefault();
-
-    const exercise = {
-      username: this.state.username,
-      description: this.state.description,
-      duration: this.state.duration,
-      date: this.state.date,
-    };
     console.log(exercise);
 
-    // axios
-    //   .post(
-    //     "https://exercise-log-nodejs-mongodb.herokuapp.com/exercises/update/" +
-    //       this.props.match.params.id,
-    //     exercise
-    //   )
-    ExerciseService.updateExercise(this.props.match.params.id, exercise)
+    ExerciseService.updateExercise(props.match.params.id, exercise)
       .then((res) => console.log(res.data))
       .then(() => (window.location = "/"));
-  }
+  };
 
-  render() {
-    return (
-      <div>
-        <h3>Update New Exercise Log</h3>
-        <form onSubmit={this.onSubmit}>
-          <div className="form-group">
-            <label>Username: </label>
-            <select
-              ref="userInput"
-              required
-              className="form-control"
-              value={this.state.username}
-              onChange={this.onChangeUsername}
-            >
-              {this.state.users.map((user) => {
-                return (
-                  <option key={user} value={user}>
-                    {user}
-                  </option>
-                );
-              })}
-            </select>
+  return (
+    <div>
+      <h3>Update New Exercise Log</h3>
+      <form onSubmit={onSubmit}>
+        <div className="form-group">
+          <label>Username: </label>
+          <select
+            ref={userInput}
+            required
+            className="form-control"
+            value={exercise.username}
+            onChange={onChangeUsername}
+          >
+            {user.map((user) => {
+              return (
+                <option key={user} value={user}>
+                  {user}
+                </option>
+              );
+            })}
+          </select>
+        </div>
+        <div className="form-group">
+          <label>Description: </label>
+          <input
+            type="text"
+            required
+            className="form-control"
+            value={exercise.description}
+            onChange={onChangeDescription}
+          />
+        </div>
+        <div className="form-group">
+          <label>Duration (in minute): </label>
+          <input
+            type="text"
+            className="form-control"
+            value={exercise.duration}
+            onChange={onChangeDuration}
+          />
+        </div>
+        <div className="form-group">
+          <label>Date: </label>
+          <div>
+            <DatePicker selected={exercise.date} onChange={onChangeDate} />
           </div>
-          <div className="form-group">
-            <label>Description: </label>
-            <input
-              type="text"
-              required
-              className="form-control"
-              value={this.state.description}
-              onChange={this.onChangeDescription}
-            />
-          </div>
-          <div className="form-group">
-            <label>Duration (in minute): </label>
-            <input
-              type="text"
-              className="form-control"
-              value={this.state.duration}
-              onChange={this.onChangeDuration}
-            />
-          </div>
-          <div className="form-group">
-            <label>Date: </label>
-            <div>
-              <DatePicker
-                selected={this.state.date}
-                onChange={this.onChangeDate}
-              />
-            </div>
-          </div>
+        </div>
 
-          <div className="form-group">
-            <input
-              type="submit"
-              value="Edit Exercise Log"
-              className="btn btn-primary"
-            />
-          </div>
-        </form>
-      </div>
-    );
-  }
+        <div className="form-group">
+          <input
+            type="submit"
+            value="Edit Exercise Log"
+            className="btn btn-primary"
+          />
+        </div>
+      </form>
+    </div>
+  );
 }
