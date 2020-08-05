@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import ExerciseService from "../service/ExerciseService";
 
+import { toast, Flip } from "react-toastify";
 const Exercise = (props) => (
   <tr>
     <td>{props.exercise.username}</td>
@@ -41,7 +42,20 @@ export default function ExercisesList(props) {
   }, []);
 
   const deleteExercise = (id) => {
-    ExerciseService.deleteExercise(id).then((res) => console.log(res.data));
+    ExerciseService.deleteExercise(id)
+      .then((res) => console.log(res.data))
+      .then(() =>
+        toast.success("Delete Exercise Success!", {
+          position: "bottom-center",
+          transition: Flip,
+        })
+      )
+      .catch((err) =>
+        toast.error(err.message, {
+          position: "bottom-center",
+          transition: Flip,
+        })
+      );
 
     const totalExercise = exercise.filter((el) => el._id !== id);
     setExercise(totalExercise);

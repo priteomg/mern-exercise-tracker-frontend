@@ -1,6 +1,7 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { BrowserRouter as Router, Route } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 
 import Navbar from "./components/navbar.component";
 import ExercisesList from "./components/exercises-list.component";
@@ -19,6 +20,7 @@ function App() {
         <Route path="/create" component={CreateExercises} />
         <Route path="/user" component={CreateUser} />
       </div>
+      <ToastContainer />
     </Router>
   );
 }

@@ -2,6 +2,10 @@ import React, { useState } from "react";
 
 import ExerciseService from "../service/ExerciseService";
 
+import { toast, Flip } from "react-toastify";
+
+import "react-toastify/dist/ReactToastify.css";
+
 export default function CreateUser(props) {
   // this.state = {
   //   username: "",
@@ -26,7 +30,20 @@ export default function CreateUser(props) {
 
     // axios
     //   .post("https://exercise-log-nodejs-mongodb.herokuapp.com/users/add", user)
-    ExerciseService.addNewUser(user).then((res) => console.log(res.data));
+    ExerciseService.addNewUser(user)
+      .then((res) => console.log(res.data))
+      .then(() =>
+        toast.success("Create User Success", {
+          position: "bottom-center",
+          transition: Flip,
+        })
+      )
+      .catch((err) =>
+        toast.error(err.message, {
+          position: "bottom-center",
+          transition: Flip,
+        })
+      );
 
     // this.setState({
     //   username: "",

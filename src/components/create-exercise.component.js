@@ -2,6 +2,10 @@ import React, { useState, useEffect, useRef } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
+import { toast, Flip } from "react-toastify";
+
+import "react-toastify/dist/ReactToastify.css";
+
 import ExerciseService from "../service/ExerciseService";
 
 export default function CreateExercise(props) {
@@ -54,52 +58,40 @@ export default function CreateExercise(props) {
   }, []);
 
   const onChangeUsername = (e) => {
-    // this.setState({
-    //   username: e.target.value,
-    // });
     setExercise({ ...exercise, username: e.target.value });
   };
 
   const onChangeDescription = (e) => {
-    // this.setState({
-    //   description: e.target.value,
-    // });
     setExercise({ ...exercise, description: e.target.value });
   };
 
   const onChangeDuration = (e) => {
-    // this.setState({
-    //   duration: e.target.value,
-    // });
     setExercise({ ...exercise, duration: e.target.value });
   };
 
   const onChangeDate = (date) => {
-    // this.setState({
-    //   date: date,
-    // });
     setExercise({ ...exercise, date: date });
   };
 
   const onSubmit = (e) => {
     e.preventDefault();
 
-    // const exercise = {
-    //   username: exercise.username,
-    //   description: this.state.description,
-    //   duration: this.state.duration,
-    //   date: this.state.date,
-    // };
-    // console.log(exercise);
-
-    // axios
-    //   .post(
-    //     "https://exercise-log-nodejs-mongodb.herokuapp.com/exercises/add",
-    //     exercise
-    //   )
     ExerciseService.createExercise(exercise)
       .then((res) => console.log(res.data))
-      .then(() => (window.location = "/"));
+      .then(() =>
+        toast.success("Create Exercise Success", {
+          position: "bottom-center",
+          transition: Flip,
+        })
+      )
+      .catch((err) =>
+        toast.error(err.message, {
+          position: "bottom-center",
+          transition: Flip,
+        })
+      );
+
+    //.then(() => (window.location = "/"));
   };
 
   return (

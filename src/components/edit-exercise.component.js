@@ -3,6 +3,10 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import ExerciseService from "../service/ExerciseService";
 
+import { toast, Flip } from "react-toastify";
+
+import "react-toastify/dist/ReactToastify.css";
+
 export default function EditExercises(props) {
   const [exercise, setExercise] = useState({
     username: "",
@@ -69,7 +73,19 @@ export default function EditExercises(props) {
 
     ExerciseService.updateExercise(props.match.params.id, exercise)
       .then((res) => console.log(res.data))
-      .then(() => (window.location = "/"));
+      .then(() =>
+        toast.success("Update Exercise Success!", {
+          position: "bottom-center",
+          transition: Flip,
+        })
+      )
+      .catch((err) =>
+        toast.error(err.message, {
+          position: "bottom-center",
+          transition: Flip,
+        })
+      );
+    //.then(() => (window.location = "/"));
   };
 
   return (
