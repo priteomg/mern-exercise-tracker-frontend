@@ -7,6 +7,12 @@ import { toast, Flip } from "react-toastify";
 
 import "react-toastify/dist/ReactToastify.css";
 
+import {
+  MuiPickersUtilsProvider,
+  KeyboardDatePicker,
+} from "@material-ui/pickers";
+import DateFnsUtils from "@date-io/date-fns";
+
 export default function EditExercises(props) {
   const [exercise, setExercise] = useState({
     username: "",
@@ -62,8 +68,6 @@ export default function EditExercises(props) {
   };
 
   const onChangeDate = (date) => {
-    console.log(date);
-
     setExercise({ ...exercise, date: date });
   };
 
@@ -89,61 +93,68 @@ export default function EditExercises(props) {
   };
 
   return (
-    <div>
-      <h3>Update New Exercise Log</h3>
-      <form onSubmit={onSubmit}>
-        <div className="form-group">
-          <label>Username: </label>
-          <select
-            ref={userInput}
-            required
-            className="form-control"
-            value={exercise.username}
-            onChange={onChangeUsername}
-          >
-            {user.map((user) => {
-              return (
-                <option key={user} value={user}>
-                  {user}
-                </option>
-              );
-            })}
-          </select>
-        </div>
-        <div className="form-group">
-          <label>Description: </label>
-          <input
-            type="text"
-            required
-            className="form-control"
-            value={exercise.description}
-            onChange={onChangeDescription}
-          />
-        </div>
-        <div className="form-group">
-          <label>Duration (in minute): </label>
-          <input
-            type="text"
-            className="form-control"
-            value={exercise.duration}
-            onChange={onChangeDuration}
-          />
-        </div>
-        <div className="form-group">
-          <label>Date: </label>
-          <div>
-            <DatePicker selected={exercise.date} onChange={onChangeDate} />
+    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+      <div>
+        <h3>Update New Exercise Log</h3>
+        <form onSubmit={onSubmit}>
+          <div className="form-group">
+            <label>Username: </label>
+            <select
+              ref={userInput}
+              required
+              className="form-control"
+              value={exercise.username}
+              onChange={onChangeUsername}
+            >
+              {user.map((user) => {
+                return (
+                  <option key={user} value={user}>
+                    {user}
+                  </option>
+                );
+              })}
+            </select>
           </div>
-        </div>
+          <div className="form-group">
+            <label>Description: </label>
+            <input
+              type="text"
+              required
+              className="form-control"
+              value={exercise.description}
+              onChange={onChangeDescription}
+            />
+          </div>
+          <div className="form-group">
+            <label>Duration (in minute): </label>
+            <input
+              type="text"
+              className="form-control"
+              value={exercise.duration}
+              onChange={onChangeDuration}
+            />
+          </div>
+          <div className="form-group">
+            <label>Date: </label>
+            <div>
+              <KeyboardDatePicker
+                margin="none"
+                format="MM/dd/yyyy"
+                value={exercise.date}
+                onChange={onChangeDate}
+              />
+            </div>
+          </div>
 
-        <div className="form-group">
-          <input
-            type="submit"
-            value="Edit Exercise Log"
-            className="btn btn-primary"
-          />
-        </div>
-      </form>
-    </div>
+          <div className="form-group">
+            <input
+              type="submit"
+              value="Edit Exercise Log"
+              className="btn btn-primary"
+            />
+          </div>
+        </form>
+      </div>
+    </MuiPickersUtilsProvider>
   );
 }

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import ExerciseService from "../service/ExerciseService";
 
 import { toast, Flip } from "react-toastify";
+
 const Exercise = (props) => (
   <tr>
     <td>{props.exercise.username}</td>

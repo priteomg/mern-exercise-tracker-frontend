@@ -1,12 +1,27 @@
 import React, { useState, useEffect, useRef } from "react";
-import DatePicker from "react-datepicker";
+
 import "react-datepicker/dist/react-datepicker.css";
 
 import { toast, Flip } from "react-toastify";
 
 import "react-toastify/dist/ReactToastify.css";
 
+import { makeStyles } from "@material-ui/core/styles";
+import Button from "@material-ui/core/Button";
+import CreateIcon from "@material-ui/icons/Create";
+import {
+  MuiPickersUtilsProvider,
+  KeyboardDatePicker,
+} from "@material-ui/pickers";
+import DateFnsUtils from "@date-io/date-fns";
+
 import ExerciseService from "../service/ExerciseService";
+
+const useStyles = makeStyles((theme) => ({
+  button: {
+    margin: theme.spacing(1),
+  },
+}));
 
 export default function CreateExercise(props) {
   // this.state = {
@@ -26,6 +41,8 @@ export default function CreateExercise(props) {
   });
 
   const [user, setUser] = useState([]);
+
+  const classes = useStyles();
 
   // componentDidMount() {
   //   // axios
@@ -50,7 +67,7 @@ export default function CreateExercise(props) {
         //   username: res.data[0].username,
         // });
         console.log(users);
-        console.log(username);
+
         setUser(users);
         setExercise({ ...exercise, username });
       }
@@ -95,61 +112,71 @@ export default function CreateExercise(props) {
   };
 
   return (
-    <div>
-      <h3>Create New Exercise Log</h3>
-      <form onSubmit={onSubmit}>
-        <div className="form-group">
-          <label>Username: </label>
-          <select
-            ref={userInput}
-            required
-            className="form-control"
-            value={exercise.control}
-            onChange={onChangeUsername}
-          >
-            {user.map((user) => {
-              return (
-                <option key={user} value={user}>
-                  {user}
-                </option>
-              );
-            })}
-          </select>
-        </div>
-        <div className="form-group">
-          <label>Description: </label>
-          <input
-            type="text"
-            required
-            className="form-control"
-            value={exercise.description}
-            onChange={onChangeDescription}
-          />
-        </div>
-        <div className="form-group">
-          <label>Duration (in minute): </label>
-          <input
-            type="text"
-            className="form-control"
-            value={exercise.duration}
-            onChange={onChangeDuration}
-          />
-        </div>
-        <div className="form-group">
-          <label>Date: </label>
-          <div>
-            <DatePicker selected={exercise.date} onChange={onChangeDate} />
+    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+      <div>
+        <h3>Create New Exercise Log</h3>
+        <form onSubmit={onSubmit}>
+          <div className="form-group">
+            <label>Username: </label>
+            <select
+              ref={userInput}
+              required
+              className="form-control"
+              value={exercise.control}
+              onChange={onChangeUsername}
+            >
+              {user.map((user) => {
+                return (
+                  <option key={user} value={user}>
+                    {user}
+                  </option>
+                );
+              })}
+            </select>
           </div>
-        </div>
+          <div className="form-group">
+            <label>Description: </label>
+            <input
+              type="text"
+              required
+              className="form-control"
+              value={exercise.description}
+              onChange={onChangeDescription}
+            />
+          </div>
+          <div className="form-group">
+            <label>Duration (in minute): </label>
+            <input
+              type="text"
+              className="form-control"
+              value={exercise.duration}
+              onChange={onChangeDuration}
+            />
+          </div>
+          <div className="form-group">
+            <label>Date: </label>
+            <div>
+              <KeyboardDatePicker
+                margin="none"
+                format="MM/dd/yyyy"
+                value={exercise.date}
+                onChange={onChangeDate}
+              />
+            </div>
+          </div>
 
-        <div className="form-group">
-          <input
-            type="submit"
-            value="Create Exercise Log"
-            className="btn btn-primary"
-          />
-        </div>
-      </form>
-    </div>
+          <Button
+            onClick={onSubmit}
+            variant="contained"
+            color="primary"
+            size="medium"
+            className={classes.button}
+            startIcon={<CreateIcon />}
+          >
+            Save
+          </Button>
+        </form>
+      </div>
+    </MuiPickersUtilsProvider>
   );
 }
