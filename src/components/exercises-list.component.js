@@ -4,6 +4,18 @@ import ExerciseService from "../service/ExerciseService";
 
 import { toast, Flip } from "react-toastify";
 
+import { makeStyles } from "@material-ui/core/styles";
+import Button from "@material-ui/core/Button";
+import EditIcon from "@material-ui/icons/Edit";
+import DeleteIcon from "@material-ui/icons/Delete";
+
+const useStyles = makeStyles({
+  button: {
+    backgroundColor: "#ce2929d4",
+    color: "white",
+  },
+});
+
 const Exercise = (props) => (
   <tr>
     <td>{props.exercise.username}</td>
@@ -11,25 +23,40 @@ const Exercise = (props) => (
     <td>{props.exercise.duration}</td>
     <td>{props.exercise.date.substring(0, 10)}</td>
     <td>
-      <button
-        className="btn btn-primary"
+      <Button
         onClick={() => (window.location = `/edit/${props.exercise._id}`)}
+        variant="contained"
+        color="primary"
+        size="medium"
+        startIcon={<EditIcon />}
       >
         Edit
-      </button>{" "}
-      <button
+      </Button>{" "}
+      <Button
+        onClick={() => {
+          props.deleteExercise(props.exercise._id);
+        }}
+        variant="contained"
+        className={props.classes}
+        size="medium"
+        startIcon={<DeleteIcon />}
+      >
+        Delete
+      </Button>
+      {/* <button
         className="btn btn-danger"
         onClick={() => {
           props.deleteExercise(props.exercise._id);
         }}
       >
         Delete
-      </button>
+      </button> */}
     </td>
   </tr>
 );
 
 export default function ExercisesList(props) {
+  const classes = useStyles();
   const [exercise, setExercise] = useState([]);
 
   useEffect(() => {
@@ -69,6 +96,7 @@ export default function ExercisesList(props) {
           exercise={currentExercise}
           deleteExercise={deleteExercise}
           key={currentExercise._id}
+          classes={classes.button}
         />
       );
     });

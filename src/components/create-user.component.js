@@ -6,10 +6,18 @@ import { toast, Flip } from "react-toastify";
 
 import "react-toastify/dist/ReactToastify.css";
 
+import { makeStyles } from "@material-ui/core/styles";
+import Button from "@material-ui/core/Button";
+import CreateIcon from "@material-ui/icons/Create";
+
+const useStyles = makeStyles((theme) => ({
+  button: {
+    margin: theme.spacing(1),
+  },
+}));
+
 export default function CreateUser(props) {
-  // this.state = {
-  //   username: "",
-  // };
+  const classes = useStyles();
 
   const [username, setUsername] = useState("");
 
@@ -65,13 +73,16 @@ export default function CreateUser(props) {
             onChange={onChangeUsername}
           />
         </div>
-        <div className="form-group">
-          <input
-            type="submit"
-            value="Create User"
-            className="btn btn-primary"
-          />
-        </div>
+        <Button
+          onClick={onSubmit}
+          variant="contained"
+          color="primary"
+          size="medium"
+          className={classes.button}
+          startIcon={<CreateIcon />}
+        >
+          Save
+        </Button>
       </form>
     </div>
   );

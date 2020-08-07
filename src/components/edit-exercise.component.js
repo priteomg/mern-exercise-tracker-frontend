@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useRef } from "react";
-import DatePicker from "react-datepicker";
+import React, { useEffect, useState } from "react";
+
 import "react-datepicker/dist/react-datepicker.css";
 import ExerciseService from "../service/ExerciseService";
 
@@ -13,7 +13,28 @@ import {
 } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 
+import InputLabel from "@material-ui/core/InputLabel";
+import MenuItem from "@material-ui/core/MenuItem";
+import FormControl from "@material-ui/core/FormControl";
+import Select from "@material-ui/core/Select";
+
+import { makeStyles } from "@material-ui/core/styles";
+import Button from "@material-ui/core/Button";
+import UpdateIcon from "@material-ui/icons/Update";
+
+const useStyles = makeStyles((theme) => ({
+  button: {
+    margin: theme.spacing(1),
+  },
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 500,
+  },
+}));
+
 export default function EditExercises(props) {
+  const classes = useStyles();
+
   const [exercise, setExercise] = useState({
     username: "",
     description: "",
@@ -22,8 +43,6 @@ export default function EditExercises(props) {
   });
 
   const [user, setUser] = useState([]);
-
-  const userInput = useRef(null);
 
   const getExerciseData = () => {
     ExerciseService.getOneExercise(props.match.params.id)
@@ -97,24 +116,22 @@ export default function EditExercises(props) {
       <div>
         <h3>Update New Exercise Log</h3>
         <form onSubmit={onSubmit}>
-          <div className="form-group">
-            <label>Username: </label>
-            <select
-              ref={userInput}
+          <FormControl className={classes.formControl}>
+            <InputLabel>Username</InputLabel>
+            <Select
               required
-              className="form-control"
               value={exercise.username}
               onChange={onChangeUsername}
             >
               {user.map((user) => {
                 return (
-                  <option key={user} value={user}>
+                  <MenuItem value={user} key={user}>
                     {user}
-                  </option>
+                  </MenuItem>
                 );
               })}
-            </select>
-          </div>
+            </Select>
+          </FormControl>
           <div className="form-group">
             <label>Description: </label>
             <input
@@ -145,14 +162,16 @@ export default function EditExercises(props) {
               />
             </div>
           </div>
-
-          <div className="form-group">
-            <input
-              type="submit"
-              value="Edit Exercise Log"
-              className="btn btn-primary"
-            />
-          </div>
+          <Button
+            onClick={onSubmit}
+            variant="contained"
+            color="primary"
+            size="medium"
+            className={classes.button}
+            startIcon={<UpdateIcon />}
+          >
+            Update
+          </Button>
         </form>
       </div>
     </MuiPickersUtilsProvider>

@@ -1,10 +1,15 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 
 import "react-datepicker/dist/react-datepicker.css";
 
 import { toast, Flip } from "react-toastify";
 
 import "react-toastify/dist/ReactToastify.css";
+
+import InputLabel from "@material-ui/core/InputLabel";
+import MenuItem from "@material-ui/core/MenuItem";
+import FormControl from "@material-ui/core/FormControl";
+import Select from "@material-ui/core/Select";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
@@ -21,9 +26,13 @@ const useStyles = makeStyles((theme) => ({
   button: {
     margin: theme.spacing(1),
   },
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 500,
+  },
 }));
 
-export default function CreateExercise(props) {
+export default function CreateExercise() {
   // this.state = {
   //   username: "",
   //   description: "",
@@ -31,7 +40,6 @@ export default function CreateExercise(props) {
   //   date: new Date(),
   //   users: [],
   // };
-  const userInput = useRef(null);
 
   const [exercise, setExercise] = useState({
     username: "",
@@ -40,7 +48,7 @@ export default function CreateExercise(props) {
     date: new Date(),
   });
 
-  const [user, setUser] = useState([]);
+  const [user, setUser] = useState([""]);
 
   const classes = useStyles();
 
@@ -116,24 +124,22 @@ export default function CreateExercise(props) {
       <div>
         <h3>Create New Exercise Log</h3>
         <form onSubmit={onSubmit}>
-          <div className="form-group">
-            <label>Username: </label>
-            <select
-              ref={userInput}
+          <FormControl className={classes.formControl}>
+            <InputLabel>Username</InputLabel>
+            <Select
               required
-              className="form-control"
-              value={exercise.control}
+              value={exercise.username}
               onChange={onChangeUsername}
             >
               {user.map((user) => {
                 return (
-                  <option key={user} value={user}>
+                  <MenuItem value={user} key={user}>
                     {user}
-                  </option>
+                  </MenuItem>
                 );
               })}
-            </select>
-          </div>
+            </Select>
+          </FormControl>
           <div className="form-group">
             <label>Description: </label>
             <input
