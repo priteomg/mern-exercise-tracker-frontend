@@ -5,14 +5,22 @@ import ExerciseService from "../service/ExerciseService";
 import { toast, Flip } from "react-toastify";
 
 import "react-toastify/dist/ReactToastify.css";
+import TextField from "@material-ui/core/TextField";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import CreateIcon from "@material-ui/icons/Create";
+import FormControl from "@material-ui/core/FormControl";
 
 const useStyles = makeStyles((theme) => ({
   button: {
     margin: theme.spacing(1),
+    marginTop: "15px",
+  },
+  formControl: {
+    //margin: theme.spacing(1),
+    marginTop: "15px",
+    //minWidth: 500,
   },
 }));
 
@@ -63,7 +71,7 @@ export default function CreateUser(props) {
     <div>
       <h3>Create New User</h3>
       <form onSubmit={onSubmit}>
-        <div className="form-group">
+        {/* <div className="form-group">
           <label>Username: </label>
           <input
             type="text"
@@ -72,7 +80,17 @@ export default function CreateUser(props) {
             value={username}
             onChange={onChangeUsername}
           />
-        </div>
+        </div> */}
+        <FormControl fullWidth className={classes.formControl}>
+          <TextField
+            className={classes.formControl}
+            label="Username"
+            variant="outlined"
+            required
+            value={username}
+            onChange={onChangeUsername}
+          />
+        </FormControl>
         <Button
           onClick={onSubmit}
           variant="contained"

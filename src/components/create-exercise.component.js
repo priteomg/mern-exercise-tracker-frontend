@@ -154,16 +154,7 @@ export default function CreateExercise() {
               })}
             </Select>
           </FormControl>
-          {/* <div className="form-group">
-            <label>Description: </label>
-            <input
-              type="text"
-              required
-              className="form-control"
-              value={exercise.description}
-              onChange={onChangeDescription}
-            />
-          </div> */}
+
           <FormControl fullWidth className={classes.formControl}>
             <TextField
               className={classes.formControl}
