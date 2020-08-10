@@ -6,6 +6,8 @@ import { toast, Flip } from "react-toastify";
 
 import "react-toastify/dist/ReactToastify.css";
 
+import TextField from "@material-ui/core/TextField";
+
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
@@ -24,11 +26,18 @@ import ExerciseService from "../service/ExerciseService";
 
 const useStyles = makeStyles((theme) => ({
   button: {
+    marginTop: "15px",
+    display: "flex",
     margin: theme.spacing(1),
   },
   formControl: {
-    margin: theme.spacing(1),
-    minWidth: 500,
+    //margin: theme.spacing(1),
+    marginTop: "15px",
+    //minWidth: 500,
+  },
+  datepick: {
+    marginTop: "15px",
+    marginLeft: "5px",
   },
 }));
 
@@ -44,7 +53,7 @@ export default function CreateExercise() {
   const [exercise, setExercise] = useState({
     username: "",
     description: "",
-    duration: 0,
+    duration: "",
     date: new Date(),
   });
 
@@ -124,12 +133,17 @@ export default function CreateExercise() {
       <div>
         <h3>Create New Exercise Log</h3>
         <form onSubmit={onSubmit}>
-          <FormControl className={classes.formControl}>
+          <FormControl
+            className={classes.formControl}
+            variant="outlined"
+            fullWidth
+          >
             <InputLabel>Username</InputLabel>
             <Select
               required
               value={exercise.username}
               onChange={onChangeUsername}
+              label="Username"
             >
               {user.map((user) => {
                 return (
@@ -140,7 +154,7 @@ export default function CreateExercise() {
               })}
             </Select>
           </FormControl>
-          <div className="form-group">
+          {/* <div className="form-group">
             <label>Description: </label>
             <input
               type="text"
@@ -149,8 +163,19 @@ export default function CreateExercise() {
               value={exercise.description}
               onChange={onChangeDescription}
             />
-          </div>
-          <div className="form-group">
+          </div> */}
+          <FormControl fullWidth className={classes.formControl}>
+            <TextField
+              className={classes.formControl}
+              label="Description"
+              variant="outlined"
+              required
+              value={exercise.description}
+              onChange={onChangeDescription}
+            />
+          </FormControl>
+
+          {/* <div className="form-group">
             <label>Duration (in minute): </label>
             <input
               type="text"
@@ -158,18 +183,27 @@ export default function CreateExercise() {
               value={exercise.duration}
               onChange={onChangeDuration}
             />
-          </div>
-          <div className="form-group">
-            <label>Date: </label>
-            <div>
-              <KeyboardDatePicker
-                margin="none"
-                format="MM/dd/yyyy"
-                value={exercise.date}
-                onChange={onChangeDate}
-              />
-            </div>
-          </div>
+          </div> */}
+          <FormControl fullWidth className={classes.formControl}>
+            <TextField
+              className={classes.formControl}
+              label="Duration (min)"
+              variant="outlined"
+              required
+              value={exercise.duration}
+              onChange={onChangeDuration}
+              type="number"
+            />
+          </FormControl>
+
+          <KeyboardDatePicker
+            className={classes.datepick}
+            label="Date"
+            margin="normal"
+            format="MM/dd/yyyy"
+            value={exercise.date}
+            onChange={onChangeDate}
+          />
 
           <Button
             onClick={onSubmit}
@@ -179,7 +213,7 @@ export default function CreateExercise() {
             className={classes.button}
             startIcon={<CreateIcon />}
           >
-            Save
+            Update
           </Button>
         </form>
       </div>
