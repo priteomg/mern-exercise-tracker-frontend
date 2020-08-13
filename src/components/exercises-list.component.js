@@ -4,7 +4,7 @@ import ExerciseService from "../service/ExerciseService";
 
 import { toast, Flip } from "react-toastify";
 
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -15,8 +15,9 @@ import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
+import theme from "../theme";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   button: {
     backgroundColor: "#ce2929d4",
     color: "white",
@@ -24,7 +25,24 @@ const useStyles = makeStyles({
   table: {
     minWidth: 650,
   },
-});
+  tbCell: {
+    backgroundColor: "#007bff6e",
+  },
+  evenRow: {
+    "&:nth-of-type(odd)": {
+      backgroundColor: "#007bff6e",
+    },
+  },
+}));
+
+const StyledTableRow = withStyles((theme) => ({
+  root: {
+    "&:nth-of-type(odd)": {
+      backgroundColor: "#f8f9fa",
+    },
+    animationDuration: "1.5s",
+  },
+}))(TableRow);
 
 export default function ExercisesList(props) {
   const classes = useStyles();
@@ -63,7 +81,10 @@ export default function ExercisesList(props) {
   const exercisesList = () => {
     return exercise.map((currentExercise) => {
       return (
-        <TableRow key={currentExercise._id}>
+        <StyledTableRow
+          key={currentExercise._id}
+          className="animate__animated animate__fadeInDown"
+        >
           <TableCell component="th" scope="row">
             {currentExercise.username}
           </TableCell>
@@ -94,7 +115,7 @@ export default function ExercisesList(props) {
               Delete
             </Button>
           </TableCell>
-        </TableRow>
+        </StyledTableRow>
       );
     });
   };
@@ -106,11 +127,21 @@ export default function ExercisesList(props) {
         <Table className={classes.table} aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell align="center">Username</TableCell>
-              <TableCell align="center">Description</TableCell>
-              <TableCell align="center">Duration (min)</TableCell>
-              <TableCell align="center">Date</TableCell>
-              <TableCell align="center">Actions</TableCell>
+              <TableCell align="center" className={classes.tbCell}>
+                Username
+              </TableCell>
+              <TableCell align="center" className={classes.tbCell}>
+                Description
+              </TableCell>
+              <TableCell align="center" className={classes.tbCell}>
+                Duration (min)
+              </TableCell>
+              <TableCell align="center" className={classes.tbCell}>
+                Date
+              </TableCell>
+              <TableCell align="center" className={classes.tbCell}>
+                Actions
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>{exercisesList()}</TableBody>
