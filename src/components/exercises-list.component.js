@@ -5,6 +5,13 @@ import ExerciseService from "../service/ExerciseService";
 import { toast, Flip } from "react-toastify";
 
 import { makeStyles } from "@material-ui/core/styles";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableContainer from "@material-ui/core/TableContainer";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
@@ -14,46 +21,10 @@ const useStyles = makeStyles({
     backgroundColor: "#ce2929d4",
     color: "white",
   },
+  table: {
+    minWidth: 650,
+  },
 });
-
-const Exercise = (props) => (
-  <tr>
-    <td>{props.exercise.username}</td>
-    <td>{props.exercise.description}</td>
-    <td>{props.exercise.duration}</td>
-    <td>{props.exercise.date.substring(0, 10)}</td>
-    <td>
-      <Button
-        onClick={() => (window.location = `/edit/${props.exercise._id}`)}
-        variant="contained"
-        color="primary"
-        size="medium"
-        startIcon={<EditIcon />}
-      >
-        Edit
-      </Button>{" "}
-      <Button
-        onClick={() => {
-          props.deleteExercise(props.exercise._id);
-        }}
-        variant="contained"
-        className={props.classes}
-        size="medium"
-        startIcon={<DeleteIcon />}
-      >
-        Delete
-      </Button>
-      {/* <button
-        className="btn btn-danger"
-        onClick={() => {
-          props.deleteExercise(props.exercise._id);
-        }}
-      >
-        Delete
-      </button> */}
-    </td>
-  </tr>
-);
 
 export default function ExercisesList(props) {
   const classes = useStyles();
@@ -92,12 +63,38 @@ export default function ExercisesList(props) {
   const exercisesList = () => {
     return exercise.map((currentExercise) => {
       return (
-        <Exercise
-          exercise={currentExercise}
-          deleteExercise={deleteExercise}
-          key={currentExercise._id}
-          classes={classes.button}
-        />
+        <TableRow key={currentExercise._id}>
+          <TableCell component="th" scope="row">
+            {currentExercise.username}
+          </TableCell>
+          <TableCell align="center">{currentExercise.description}</TableCell>
+          <TableCell align="center">{currentExercise.duration}</TableCell>
+          <TableCell align="center">
+            {currentExercise.date.substring(0, 10)}
+          </TableCell>
+          <TableCell align="center">
+            <Button
+              onClick={() => (window.location = `/edit/${currentExercise._id}`)}
+              variant="contained"
+              color="primary"
+              size="medium"
+              startIcon={<EditIcon />}
+            >
+              Edit
+            </Button>{" "}
+            <Button
+              onClick={() => {
+                deleteExercise(currentExercise._id);
+              }}
+              variant="contained"
+              className={classes.button}
+              size="medium"
+              startIcon={<DeleteIcon />}
+            >
+              Delete
+            </Button>
+          </TableCell>
+        </TableRow>
       );
     });
   };
@@ -105,18 +102,20 @@ export default function ExercisesList(props) {
   return (
     <div>
       <h3>Logged Exercises</h3>
-      <table className="table">
-        <thead className="thead-light">
-          <tr>
-            <th>Username</th>
-            <th>Description</th>
-            <th>Duration(min)</th>
-            <th>Date</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>{exercisesList()}</tbody>
-      </table>
+      <TableContainer component={Paper}>
+        <Table className={classes.table} aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              <TableCell align="center">Username</TableCell>
+              <TableCell align="center">Description</TableCell>
+              <TableCell align="center">Duration (min)</TableCell>
+              <TableCell align="center">Date</TableCell>
+              <TableCell align="center">Actions</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>{exercisesList()}</TableBody>
+        </Table>
+      </TableContainer>
     </div>
   );
 }
