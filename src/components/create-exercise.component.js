@@ -61,28 +61,12 @@ export default function CreateExercise() {
 
   const classes = useStyles();
 
-  // componentDidMount() {
-  //   // axios
-  //   //   .get("https://exercise-log-nodejs-mongodb.herokuapp.com/users")
-  //   ExerciseService.getAllUser().then((res) => {
-  //     if (res.data.length > 0) {
-  //       this.setState({
-  //         users: res.data.map((user) => user.username),
-  //         username: res.data[0].username,
-  //       });
-  //     }
-  //   });
-  // }
-
   useEffect(() => {
     ExerciseService.getAllUser().then((res) => {
       if (res.data.length > 0) {
         let users = res.data.map((user) => user.username);
         let username = res.data[0].username;
-        // this.setState({
-        //   users: res.data.map((user) => user.username),
-        //   username: res.data[0].username,
-        // });
+
         console.log(users);
 
         setUser(users);
@@ -166,15 +150,6 @@ export default function CreateExercise() {
             />
           </FormControl>
 
-          {/* <div className="form-group">
-            <label>Duration (in minute): </label>
-            <input
-              type="text"
-              className="form-control"
-              value={exercise.duration}
-              onChange={onChangeDuration}
-            />
-          </div> */}
           <FormControl fullWidth className={classes.formControl}>
             <TextField
               className={classes.formControl}

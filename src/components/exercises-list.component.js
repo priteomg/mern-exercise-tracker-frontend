@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 
 import ExerciseService from "../service/ExerciseService";
 
+import EditExercises from "./edit-exercise.component";
+
 import { toast, Flip } from "react-toastify";
 
 import { makeStyles, withStyles } from "@material-ui/core/styles";
@@ -15,7 +17,6 @@ import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
-import theme from "../theme";
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -85,7 +86,7 @@ export default function ExercisesList(props) {
           key={currentExercise._id}
           className="animate__animated animate__fadeInDown"
         >
-          <TableCell component="th" scope="row">
+          <TableCell component="th" scope="row" align="center">
             {currentExercise.username}
           </TableCell>
           <TableCell align="center">{currentExercise.description}</TableCell>
