@@ -17,6 +17,13 @@ import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
+import { useTheme } from "@material-ui/core/styles";
+import { Typography } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -48,6 +55,9 @@ const StyledTableRow = withStyles((theme) => ({
 export default function ExercisesList(props) {
   const classes = useStyles();
   const [exercise, setExercise] = useState([]);
+  const [open, setOpen] = useState(false);
+  const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
   useEffect(() => {
     ExerciseService.getAllExercise()
@@ -59,24 +69,56 @@ export default function ExercisesList(props) {
       });
   }, []);
 
-  const deleteExercise = (id) => {
-    ExerciseService.deleteExercise(id)
-      .then((res) => console.log(res.data))
-      .then(() =>
-        toast.success("Delete Exercise Success!", {
-          position: "bottom-center",
-          transition: Flip,
-        })
-      )
-      .catch((err) =>
-        toast.error(err.message, {
-          position: "bottom-center",
-          transition: Flip,
-        })
-      );
+  const handleClose = () => {
+    setOpen(false);
+  };
 
-    const totalExercise = exercise.filter((el) => el._id !== id);
-    setExercise(totalExercise);
+  const DialogDel = () => {
+    return (
+      <Dialog
+        fullScreen={fullScreen}
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="responsive-dialog-title"
+      >
+        <DialogTitle id="responsive-dialog-title">
+          {"Use Google's location service?"}
+        </DialogTitle>
+        <DialogContent>
+          <Typography>Are you sure to delete this ? {}</Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button autoFocus onClick={handleClose} color="primary">
+            Disagree
+          </Button>
+          <Button onClick={handleClose} color="primary" autoFocus>
+            Agree
+          </Button>
+        </DialogActions>
+      </Dialog>
+    );
+  };
+
+  const deleteExercise = (id) => {
+    if (window.confirm("Are you sure")) {
+      ExerciseService.deleteExercise(id)
+        .then((res) => console.log(res.data))
+        .then(() =>
+          toast.success("Delete Exercise Success!", {
+            position: "bottom-center",
+            transition: Flip,
+          })
+        )
+        .catch((err) =>
+          toast.error(err.message, {
+            position: "bottom-center",
+            transition: Flip,
+          })
+        );
+
+      const totalExercise = exercise.filter((el) => el._id !== id);
+      setExercise(totalExercise);
+    }
   };
 
   const exercisesList = () => {
