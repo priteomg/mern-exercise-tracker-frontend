@@ -8,7 +8,7 @@ Install npm first:
 
 ### `npm install`
 
-run this project: 
+run this project(no need to run with back-end proj ,I already push it to heroku): 
 
 ### `npm start`
 
